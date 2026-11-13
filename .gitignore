@@ -1,0 +1,9 @@
+*.cov
+*.jl.*.cov
+*.jl.cov
+*.jl.mem
+*.swp
+.DS_Store
+/Manifest*.toml
+/docs/Manifest*.toml
+/docs/build/
