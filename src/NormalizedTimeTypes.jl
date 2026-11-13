@@ -280,12 +280,14 @@ struct NormalizedTimeType
     end
 
     function NormalizedTimeType(t::TimeType, tz::AbstractString)
+        # Avoid parsing if we already have a ZonedDateTime
+        t isa ZonedDateTime && return NormalizedTimeType(t)
+
         tz = try
             TimeZone(tz)
         catch ex
             !isa(ex, ArgumentError) && rethrow()
-            # If the timezone is not recognized, we will try to expand it from a legacy
-            # abbreviation
+            # If the timezone is not recognized, try to expand it from a legacy abbreviation
             expand_legacy_timezone(tz)
         end
         return NormalizedTimeType(t, tz)
