@@ -121,8 +121,6 @@ const COMMON_TZ_ABBRS = Dict(
     "SAST" => tz"Africa/Johannesburg",
     "WAT" => tz"Africa/Lagos",
     "WAST" => tz"Africa/Windhoek",
-    "AST" => tz"America/Caracas",
-    "ADT" => tz"America/Caracas",
     "COT" => tz"America/Bogota",
     "PET" => tz"America/Lima",
     "VET" => tz"America/Caracas"
@@ -130,7 +128,7 @@ const COMMON_TZ_ABBRS = Dict(
 
 
 """
-A container type for various views of a given `TimeType` which, via converters.
+A container type for various views of `TimeType` providing easy accecssors and converters for UTC, TimeZone aware time, and unix milliseconds.
 
 * `struct NormalizedTimeType`
 
@@ -188,42 +186,38 @@ You may also add and subtract any `Dates.Period` or `Dates.CompoundPeriod` to/fr
 
 For example:
 
-```julia
+```jldoctest
+julia> using Dates, NormalizedTimeTypes
+
 julia> t1 = NormalizedTimeType(Date(2016, 10, 10))
-NormalizedTimeType(UTC,2016-10-10T00:00:00,2016-10-10T00:00:00+00:00,1476057600000)
+NormalizedTimeType(tz"UTC", DateTime("2016-10-10T00:00:00"), TimeZones.ZonedDateTime(2016, 10, 10, tz"UTC"), 1476057600000)
 
 julia> t1 + Dates.Month(1) - Dates.Day(2)
-NormalizedTimeType(UTC,2016-11-08T00:00:00,2016-11-08T00:00:00+00:00,1478563200000)
+NormalizedTimeType(tz"UTC", DateTime("2016-11-08T00:00:00"), TimeZones.ZonedDateTime(2016, 11, 8, tz"UTC"), 1478563200000)
 
 julia> t1 - Dates.Month(1) + Dates.Week(1)
-NormalizedTimeType(UTC,2016-09-17T00:00:00,2016-09-17T00:00:00+00:00,1474070400000)
+NormalizedTimeType(tz"UTC", DateTime("2016-09-17T00:00:00"), TimeZones.ZonedDateTime(2016, 9, 17, tz"UTC"), 1474070400000)
 ```
 
 
 #### Examples
-```julia
+```jldoctest
+julia> using NormalizedTimeTypes, TimeZones, Dates
+
 julia> NormalizedTimeType(Date(2016, 10, 10))
-NormalizedTimeType(UTC,2016-10-10T00:00:00,2016-10-10T00:00:00+00:00,1476057600000)
-```
+NormalizedTimeType(tz"UTC", DateTime("2016-10-10T00:00:00"), ZonedDateTime(2016, 10, 10, tz"UTC"), 1476057600000)
 
-```julia
 julia> NormalizedTimeType(DateTime(2016, 10, 10, 1, 2, 3))
-NormalizedTimeType(UTC,2016-10-10T01:02:03,2016-10-10T01:02:03+00:00,1476061323000)
-```
+NormalizedTimeType(tz"UTC", DateTime("2016-10-10T01:02:03"), ZonedDateTime(2016, 10, 10, 1, 2, 3, tz"UTC"), 1476061323000)
 
-```julia
 julia> NormalizedTimeType(ZonedDateTime(DateTime(2016, 10, 10, 1, 2, 3), tz"America/New_York"))
-NormalizedTimeType(America/New_York (UTC-5/UTC-4),2016-10-10T05:02:03,2016-10-10T05:02:03-04:00,1476075723000)
-```
+NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T05:02:03"), ZonedDateTime(2016, 10, 10, 1, 2, 3, tz"America/New_York"), 1476075723000)
 
-```julia
 julia> NormalizedTimeType(DateTime(2016, 10, 10, 1, 2, 3), tz"America/New_York")
-NormalizedTimeType(America/New_York (UTC-5/UTC-4),2016-10-10T05:02:03,2016-10-10T05:02:03-04:00,1476075723000)
-```
+NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T05:02:03"), ZonedDateTime(2016, 10, 10, 1, 2, 3, tz"America/New_York"), 1476075723000)
 
-```julia
 julia> NormalizedTimeType(DateTime(2016, 10, 10, 1, 2, 3), "America/New_York")
-NormalizedTimeType(America/New_York (UTC-5/UTC-4),2016-10-10T05:02:03,2016-10-10T05:02:03-04:00,1476075723000)
+NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T05:02:03"), ZonedDateTime(2016, 10, 10, 1, 2, 3, tz"America/New_York"), 1476075723000)
 ```
 
 #### See also
@@ -386,23 +380,23 @@ An array of [`NormalizedTimeType`](@ref)
 
 #### Example
 
-```julia
-julia> norms = TimeUtilities.normalizeTimestamps(
+```jldoctest
+julia> using NormalizedTimeTypes, TimeZones, Dates
+
+julia> norms = NormalizedTimeTypes.normalizeTimestamps(
            DateTime(2016, 10, 10, 1, 2, 3),
            ZonedDateTime(DateTime(2016, 10, 10), TimeZone("America/New_York")),
            Date(2015, 4, 3)
        )
-3-element Array{TimeUtilities.NormalizedTimeType,1}:
- TimeUtilities.NormalizedTimeType(UTC,2016-10-10T01:02:03,2016-10-10T01:02:03+00:00,1476061323000)
- TimeUtilities.NormalizedTimeType(America/New_York (UTC-5/UTC-4),2016-10-10T04:00:00,2016-10-10T04:00:00-04:00,1476072000000)
- TimeUtilities.NormalizedTimeType(UTC,2015-04-03T00:00:00,2015-04-03T00:00:00+00:00,1428019200000)
-```
+3-element Vector{NormalizedTimeType}:
+ NormalizedTimeType(tz"UTC", DateTime("2016-10-10T01:02:03"), ZonedDateTime(2016, 10, 10, 1, 2, 3, tz"UTC"), 1476061323000)
+ NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T04:00:00"), ZonedDateTime(2016, 10, 10, tz"America/New_York"), 1476072000000)
+ NormalizedTimeType(tz"UTC", DateTime("2015-04-03T00:00:00"), ZonedDateTime(2015, 4, 3, tz"UTC"), 1428019200000)
 
-```julia
-julia> norms = TimeUtilities.normalizeTimestamps("America/New_York", DateTime(2016, 10, 10, 1, 2, 3), Date(2015, 4, 3))
-2-element Array{TimeUtilities.NormalizedTimeType,1}:
- TimeUtilities.NormalizedTimeType(America/New_York (UTC-5/UTC-4),2016-10-10T05:02:03,2016-10-10T01:02:03-04:00,1476075723000)
- TimeUtilities.NormalizedTimeType(America/New_York (UTC-5/UTC-4),2015-04-03T04:00:00,2015-04-03T00:00:00-04:00,1428033600000)
+julia> norms = NormalizedTimeTypes.normalizeTimestamps("America/New_York", DateTime(2016, 10, 10, 1, 2, 3), Date(2015, 4, 3))
+2-element Vector{NormalizedTimeType}:
+ NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T05:02:03"), ZonedDateTime(2016, 10, 10, 1, 2, 3, tz"America/New_York"), 1476075723000)
+ NormalizedTimeType(tz"America/New_York", DateTime("2015-04-03T04:00:00"), ZonedDateTime(2015, 4, 3, tz"America/New_York"), 1428033600000)
 ```
 """
 normalizeTimestamps(t::Union{NormalizedTimeType,TimeType}...) = NormalizedTimeType[NormalizedTimeType(x) for x in t]

@@ -1,7 +1,11 @@
+using Test, Documenter
 using NormalizedTimeTypes
-using Test, Dates, TimeZones
 
+doctest(dirname(@__DIR__), [NormalizedTimeTypes])
+
+using Dates, TimeZones
 using NormalizedTimeTypes: expand_legacy_timezone, normalizeTimestamps
+
 
 @testset "Legacy Time Zones" begin
     @test tz"UTC" == expand_legacy_timezone("")

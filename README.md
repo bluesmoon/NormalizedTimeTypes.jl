@@ -19,95 +19,154 @@ Following Postel's Law ("be strict in what you produce, lenient in what you acce
 
 ## Quick Start
 
-### Basic Usage
+**Note** You will need the `TimeZones` module in your project for this package to be most useful. Install it with:
 
 ```julia
-using NormalizedTimeTypes
+] add NormalizedTimeTypes TimeZones
+```
 
-# From a Date, uses UTC by default
-norm = NormalizedTimeType(Date(2016, 10, 10))
+### Basic Usage
 
-# From a ZonedDateTime
-norm = NormalizedTimeType(ZonedDateTime(2016, 10, 10, 12, 30, 0, tz"America/New_York"))
+```jldoctest; filter = r"^(..@ NormalizedTimeTypes) [^\n]*(NormalizedTimeTypes.jl/src/NormalizedTimeTypes.jl):\d+$"sm => s"\1 \2"
+julia> using NormalizedTimeTypes, Dates, TimeZones
 
-# From a DateTime with legacy timezone as a string
-norm = NormalizedTimeType(DateTime(2016, 10, 10, 12, 30, 0), "EDT")  # Eastern Daylight Time
-# Prints a warning: "Received an abbreviated TimeZone: EDT, using full timezone: America/New_York instead."
+julia> # From a Date, uses UTC by default
 
-# From a string (format auto-detected)
-norm = NormalizedTimeType("2016-10-10T12:30:00")
-norm = NormalizedTimeType("2016-10-10T12:30:00-05:00")  # with timezone offset
+julia> norm = NormalizedTimeType(Date(2016, 10, 10))
+NormalizedTimeType(tz"UTC", DateTime("2016-10-10T00:00:00"), ZonedDateTime(2016, 10, 10, tz"UTC"), 1476057600000)
+
+julia> # From a ZonedDateTime
+
+julia> norm = NormalizedTimeType(ZonedDateTime(2016, 10, 10, 12, 30, 0, tz"America/New_York"))
+NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T16:30:00"), ZonedDateTime(2016, 10, 10, 12, 30, tz"America/New_York"), 1476117000000)
+
+julia> # From a DateTime with legacy timezone as a string
+
+julia> norm = NormalizedTimeType(DateTime(2016, 10, 10, 12, 30, 0), "EDT")  # Eastern Daylight Time
+┌ Warning: Received an abbreviated TimeZone: EDT, using full timezone: America/New_York instead.
+└ @ NormalizedTimeTypes /data/NormalizedTimeTypes.jl/src/NormalizedTimeTypes.jl:352
+NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T16:30:00"), ZonedDateTime(2016, 10, 10, 12, 30, tz"America/New_York"), 1476117000000)
+
+julia> # Prints a warning: "Received an abbreviated TimeZone: EDT, using full timezone: America/New_York instead."
+
+julia> # From a string (format auto-detected)
+
+julia> norm = NormalizedTimeType("2016-10-10T12:30:00")
+NormalizedTimeType(tz"UTC", DateTime("2016-10-10T12:30:00"), ZonedDateTime(2016, 10, 10, 12, 30, tz"UTC"), 1476102600000)
+
+julia> norm = NormalizedTimeType("2016-10-10T12:30:00-05:00")  # with timezone offset
+NormalizedTimeType(tz"UTC-05:00", DateTime("2016-10-10T17:30:00"), ZonedDateTime(2016, 10, 10, 12, 30, tz"UTC-05:00"), 1476120600000)
 ```
 
 ### Accessing Time Values
 
 Each `NormalizedTimeType` provides multiple views of the same instant:
 
-```julia
-norm = NormalizedTimeType(DateTime(2016, 10, 10, 12, 30, 0), tz"America/New_York")
+```jldoctest; output=false
+julia> using NormalizedTimeTypes, Dates, TimeZones
 
-# UTC DateTime
-norm.utc_datetime  # DateTime(2016, 10, 10, 16, 30, 0)
+julia> norm = NormalizedTimeType(DateTime(2016, 10, 10, 12, 30, 0), tz"America/New_York")
+NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T16:30:00"), ZonedDateTime(2016, 10, 10, 12, 30, tz"America/New_York"), 1476117000000)
 
-# Timezone-aware view
-norm.tz_datetime   # ZonedDateTime(2016, 10, 10, 12, 30, 0, America/New_York)
+julia> # UTC DateTime
 
-# Milliseconds since Unix Epoch
-norm.unix_ms       # Int64
+julia> norm.utc_datetime  # DateTime(2016, 10, 10, 16, 30, 0)
+2016-10-10T16:30:00
 
-# Timezone info
-norm.timezone      # TimeZone("America/New_York")
+julia> # Timezone-aware view
+
+julia> norm.tz_datetime   # ZonedDateTime(2016, 10, 10, 12, 30, 0, America/New_York)
+2016-10-10T12:30:00-04:00
+
+julia> # Milliseconds since Unix Epoch
+
+julia> norm.unix_ms       # Int64
+1476117000000
+
+julia> # Timezone info
+
+julia> norm.timezone      # TimeZone("America/New_York")
+America/New_York (UTC-5/UTC-4)
 ```
 
 ### Working with Multiple Timestamps
 
 Normalize a collection of timestamps (possibly with different timezones):
 
-```julia
-using Dates, TimeZones
+```jldoctest; output=false
+julia> using NormalizedTimeTypes, Dates, TimeZones
 
-# Without explicit timezone (each retains its own)
-timestamps = NormalizedTimeTypes.normalizeTimestamps(
-    DateTime(2016, 10, 10),
-    ZonedDateTime(2016, 10, 12, tz"America/New_York"),
-    Date(2015, 4, 3)
-)
+julia> # Without explicit timezone (each retains its own)
 
-# With a default timezone for unaware inputs
-timestamps = NormalizedTimeTypes.normalizeTimestamps(
-    tz"America/Los_Angeles",
-    DateTime(2016, 10, 10),
-    Date(2015, 4, 3)
-)
+julia> timestamps = NormalizedTimeTypes.normalizeTimestamps(
+           DateTime(2016, 10, 10),
+           ZonedDateTime(2016, 10, 12, tz"America/New_York"),
+           Date(2015, 4, 3)
+       )
+3-element Vector{NormalizedTimeType}:
+ NormalizedTimeType(tz"UTC", DateTime("2016-10-10T00:00:00"), ZonedDateTime(2016, 10, 10, tz"UTC"), 1476057600000)
+ NormalizedTimeType(tz"America/New_York", DateTime("2016-10-12T04:00:00"), ZonedDateTime(2016, 10, 12, tz"America/New_York"), 1476244800000)
+ NormalizedTimeType(tz"UTC", DateTime("2015-04-03T00:00:00"), ZonedDateTime(2015, 4, 3, tz"UTC"), 1428019200000)
+
+julia> # With a default timezone for unaware inputs
+
+julia> timestamps = NormalizedTimeTypes.normalizeTimestamps(
+           tz"America/Los_Angeles",
+           DateTime(2016, 10, 10),
+           Date(2015, 4, 3)
+       )
+2-element Vector{NormalizedTimeType}:
+ NormalizedTimeType(tz"America/Los_Angeles", DateTime("2016-10-10T07:00:00"), ZonedDateTime(2016, 10, 10, tz"America/Los_Angeles"), 1476082800000)
+ NormalizedTimeType(tz"America/Los_Angeles", DateTime("2015-04-03T07:00:00"), ZonedDateTime(2015, 4, 3, tz"America/Los_Angeles"), 1428044400000)
 ```
 
 ### Arithmetic Operations
 
 Add or subtract time periods:
 
-```julia
-norm1 = NormalizedTimeType(DateTime(2016, 10, 10), "America/New_York")
+```jldoctest; output=false
+julia> using NormalizedTimeTypes, Dates, TimeZones
 
-# Add/subtract Dates.Period or CompoundPeriod
-norm2 = norm1 + Dates.Month(1)           # One month later
-norm3 = norm1 - Dates.Week(2)            # Two weeks earlier
-norm4 = norm1 + (Dates.Day(1) - Dates.Hour(6))
+julia> norm1 = NormalizedTimeType(DateTime(2016, 10, 10), "America/New_York")
+NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T04:00:00"), ZonedDateTime(2016, 10, 10, tz"America/New_York"), 1476072000000)
 
-# Difference between two NormalizedTimeType objects
-diff = norm4 - norm1            # Returns a Dates.Period
+julia> # Add/subtract Dates.Period or CompoundPeriod
+
+julia> norm2 = norm1 + Dates.Month(1)           # One month later
+NormalizedTimeType(tz"America/New_York", DateTime("2016-11-10T05:00:00"), ZonedDateTime(2016, 11, 10, tz"America/New_York"), 1478754000000)
+
+julia> norm3 = norm1 - Dates.Week(2)            # Two weeks earlier
+NormalizedTimeType(tz"America/New_York", DateTime("2016-09-26T04:00:00"), ZonedDateTime(2016, 9, 26, tz"America/New_York"), 1474862400000)
+
+julia> norm4 = norm1 + (Dates.Day(1) - Dates.Hour(6))
+NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T22:00:00"), ZonedDateTime(2016, 10, 10, 18, tz"America/New_York"), 1476136800000)
+
+julia> # Difference between two NormalizedTimeType objects
+
+julia> diff = norm4 - norm1            # Returns a Dates.Period
+64800000 milliseconds
 ```
 
 ### Type Conversion
 
 `NormalizedTimeType` can be used wherever `DateTime`, `ZonedDateTime`, or `Int64` are needed:
 
-```julia
-norm = NormalizedTimeType(DateTime(2016, 10, 10, 12, 30, 0), "America/New_York")
+```jldoctest; output=false
+julia> using NormalizedTimeTypes, Dates, TimeZones
 
-# Automatic conversion via Base.convert
-convert(DateTime, norm)         # UTC DateTime
-convert(ZonedDateTime, norm)    # ZonedDateTime in original timezone
-convert(Int64, norm)            # Milliseconds since Unix Epoch
+julia> norm = NormalizedTimeType(DateTime(2016, 10, 10, 12, 30, 0), "America/New_York")
+NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T16:30:00"), ZonedDateTime(2016, 10, 10, 12, 30, tz"America/New_York"), 1476117000000)
+
+julia> # Automatic conversion via Base.convert
+
+julia> convert(DateTime, norm)         # UTC DateTime
+2016-10-10T16:30:00
+
+julia> convert(ZonedDateTime, norm)    # ZonedDateTime in original timezone
+2016-10-10T12:30:00-04:00
+
+julia> convert(Int64, norm)            # Milliseconds since Unix Epoch
+1476117000000
 ```
 
 ## Supported Input Formats
