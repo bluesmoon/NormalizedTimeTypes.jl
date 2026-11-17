@@ -1,3 +1,10 @@
+"""
+`NormalizedTimeTypes` provides the `NormalizedTimeType` container type for representing
+a date/time value in multiple views, including UTC, TimeZone aware time, and unix
+milliseconds. It also provides utility functions for normalizing multiple `TimeType`s
+to `NormalizedTimeType`s, parsing dates stored in strings, and converting legacy timezone
+abbreviations to full TimeZone names.
+"""
 module NormalizedTimeTypes
 
 using Dates
@@ -131,8 +138,10 @@ const COMMON_TZ_ABBRS = Dict(
 A container type for various views of `TimeType` providing easy accecssors and converters for UTC, TimeZone aware time, and unix milliseconds.
 
 * `struct NormalizedTimeType`
+* `NormalizedTimeType(::TimeType|AbstractString, ::TimeZone|AbstractString=tz"UTC") → NormalizedTimeType`
+* `NormalizedTimeType(::NormalizedTimeType, ...) → NormalizedTimeType`
 
-#### Fields
+### Fields
 
 `timezone::TimeZone`
 : The `TimeZone` of the contained `TimeType`.
@@ -147,39 +156,37 @@ A container type for various views of `TimeType` providing easy accecssors and c
 : The contained `TimeType` represented as milliseconds since the Unix Epoch of
   1970-01-01T00:00:00.000Z
 
-#### Constructors
+### Constructors
 
-`NormalizedTimeType(::TimeType)`
-: Constructs a `NormalizedTimeType` from a `TimeType`. The passed in `TimeType`
-  may be a `Date`, a `DateTime`, a `ZonedDateTime`, or any other subtype of `TimeType`
+The `NormalizedTimeType` constructor typically accepts 2 arguments.
 
-`NormalizedTimeType(::TimeType, ::TimeZone|AbstractString)`
-: Constructs a `NormalizedTimeType` from a `DateTime` with an associated `TimeZone`.
-  The second parameter may either be a `TimeZone` object or a string TimeZone name.
+The first argument is a representation of a date/time which may be a `TimeType` (`Date`,
+`DateTime`, `ZonedDateTime`, etc.) or a string representation of a date/time, or a
+`NormalizedTimeType` object.
 
-`NormalizedTimeType(::NormalizedTimeType, ...)`
-: Constructs a `NormalizedTimeType` from another `NormalizedTimeType`.  This is useful
-  for converting a `NormalizedTimeType` to a different timezone.
+Will check [`DATE_FORMATS`](@ref) and [`DATE_FORMATS_TZ`](@ref) for a suitable parser if 
+passed in a string.
 
-`NormalizedTimeType(::AbstractString, ::TimeZone|AbstractString="")`
-: Constructs a `NormalizedTimeType` from a string representation of a date/time with an
-  associated `TimeZone`. The second parameter may be excluded if the string representation
-  includes a timezone, or it may be a `VariableTimeZone` to use instead of a `FixedTimeZone`
-  parsed from the string.
+The second argument is optional and is a `TimeZone` or a string representation of a
+timezone. It defaults to `tz"UTC"`.
 
-Will check [`DATE_FORMATS`](@ref) and [`DATE_FORMATS_TZ`](@ref) for a suitable parser.
+If the first argument already has an associated timezone, then the second argument is
+ignored.
+
+If the second argument is a legacy timezone abbreviation, then it will be expanded to a
+full timezone name using [`expand_legacy_timezone`](@ref).
 
 If the object represents a timestamp that falls within a DST transition period of the
 specified timezone, then this function will attempt to determine the most appropriate
 value by checking the delta with the DST transition, applying that to the UTC equivalent,
 and then converting.
 
-#### Converters
+### Converters
 
 `NormalizedTimeType` has converters for `DateTime`, `ZonedDateTime`, and `Int64`, so it
 may be used wherever one of these three types is required.
 
-#### Operators
+### Operators
 
 You may also add and subtract any `Dates.Period` or `Dates.CompoundPeriod` to/from a
 `NormalizedTimeType` object to get a new `NormalizedTimeType` object.
@@ -199,8 +206,15 @@ julia> t1 - Dates.Month(1) + Dates.Week(1)
 NormalizedTimeType(tz"UTC", DateTime("2016-09-17T00:00:00"), TimeZones.ZonedDateTime(2016, 9, 17, tz"UTC"), 1474070400000)
 ```
 
+### Extended methods
 
-#### Examples
+This type extends `trunc`, `floor`, and `ceil` for `NormalizedTimeType` objects, so you may use these functions to round
+to the nearest period.
+
+`Dates.datetime2unix` is also extended to accept `NormalizedTimeType` objects, returning the seconds since the Unix Epoch
+as a `Float64`.
+
+### Examples
 ```jldoctest
 julia> using NormalizedTimeTypes, TimeZones, Dates
 
@@ -220,7 +234,7 @@ julia> NormalizedTimeType(DateTime(2016, 10, 10, 1, 2, 3), "America/New_York")
 NormalizedTimeType(tz"America/New_York", DateTime("2016-10-10T05:02:03"), ZonedDateTime(2016, 10, 10, 1, 2, 3, tz"America/New_York"), 1476075723000)
 ```
 
-#### See also
+### See also
 [`NormalizedTimeTypes.normalizeTimestamps`](@ref)
 """
 struct NormalizedTimeType
@@ -232,7 +246,7 @@ struct NormalizedTimeType
     # We include the tz parameter because a caller might pass it and we do not want
     # that to fall back to the TimeType method.
     function NormalizedTimeType(t::ZonedDateTime, tz::TimeZone=tz"UTC")
-        return new(t.timezone, t.utc_datetime, t, round(Int64, datetime2unix(t.utc_datetime) * 1000))
+        return new(t.timezone, t.utc_datetime, t, datetime2unix_ms(t.utc_datetime))
     end
 
     # Method for TimeTypes that are not ZonedDateTime. This function checks for ambiguity
@@ -328,6 +342,7 @@ TimeZones.ZonedDateTime(x::NormalizedTimeType) = x.tz_datetime
 ==(x::NormalizedTimeType, y::NormalizedTimeType) = x.unix_ms == y.unix_ms && x.timezone == y.timezone
 
 Base.isless(x::NormalizedTimeType, y::NormalizedTimeType) = isless(x.unix_ms, y.unix_ms)
+Base.hash(x::NormalizedTimeType, h::UInt) = hash(x.tz_datetime, h)
 
 ### Add `trunc`, `floor` and `ceil` for NormalizedTimeType
 Base.trunc(dt::NormalizedTimeType, p::Type{<:Dates.Period}) = NormalizedTimeType(floor(dt.tz_datetime, p))
@@ -338,6 +353,9 @@ Dates.datetime2unix(n::NormalizedTimeType)::Float64 = n.unix_ms / 1000
 Dates.datetime2unix(z::ZonedDateTime)::Float64      = datetime2unix(z.utc_datetime)
 
 """
+* datetime2unix_ms(::NormalizedTimeType) → Int64
+* datetime2unix_ms(::TimeType) → Int64
+
 Return the milliseconds since the Unix Epoch of 1970-01-01T00:00:00.000Z of a `NormalizedTimeType` or `TimeType`.
 
 Similar to `Dates.datetime2unix`, but returns milliseconds as an `Int64` instead of seconds.
@@ -348,7 +366,7 @@ datetime2unix_ms(dt::Date)::Int64               = round(Int64, Dates.datetime2un
 datetime2unix_ms(dt::ZonedDateTime)::Int64      = datetime2unix_ms(dt.utc_datetime)
 
 """
-    * unix_ms2datetime(::Int64) → DateTime
+* unix_ms2datetime(::Int64) → DateTime
 
 Return the `DateTime` representation of milliseconds since the Unix Epoch of 1970-01-01T00:00:00.000Z.
 """
@@ -356,8 +374,11 @@ unix_ms2datetime(ms::Int64)::DateTime = Dates.unix2datetime(ms / 1000)
 
 
 """
-Convert a legacy TimeZone abbreviation to a full TimeZone name. Returns UTC for
-unrecognized abbreviations.
+* expand_legacy_timezone(::AbstractString) → TimeZone
+
+Convert a legacy TimeZone abbreviation to a full TimeZone name. Returns UTC for unrecognized
+abbreviations. Looks at [`COMMON_TZ_ABBRS`](@ref) for common abbreviations, and falls back
+to [`timezones_from_abbr`](https://juliatime.github.io/TimeZones.jl/stable/api-public/#TimeZones.timezones_from_abbr) for others.
 """
 function expand_legacy_timezone(tz_str::AbstractString)::TimeZone
     if isempty(tz_str)
@@ -389,17 +410,17 @@ Normalize multiple `TimeType`s to `NormalizedTimeType`s
 
 `TimeType` is the common supertype for `DateTime`, `Date`, `ZonedDateTime` and others.
 
-#### Arguments
+### Arguments
 `tz::AbstractString|TimeZone`
 : [optional] The common timezone to use for all `t`s that don't have their own TimeZone
 
 `t::TimeType...`
 : The time values to normalize.
 
-#### Returns
+### Returns
 An array of [`NormalizedTimeType`](@ref)
 
-#### Example
+### Example
 
 ```jldoctest
 julia> using NormalizedTimeTypes, TimeZones, Dates

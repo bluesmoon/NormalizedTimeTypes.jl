@@ -6,9 +6,41 @@ CurrentModule = NormalizedTimeTypes
 
 Documentation for [NormalizedTimeTypes](https://github.com/bluesmoon/NormalizedTimeTypes.jl).
 
-```@index
+```@docs
+NormalizedTimeTypes
 ```
 
+```@index
+Order = [:constant, :type, :function]
+```
+
+## Exported Types
+
 ```@autodocs
-Modules = [NormalizedTimeTypes]
+Modules=[NormalizedTimeTypes]
+Order=[:type]
+Private=false
+```
+
+## Exported Methods
+
+```@autodocs
+Modules=[NormalizedTimeTypes]
+Order=[:function]
+Private=false
+```
+
+## Constants
+
+```@autodocs
+Modules=[NormalizedTimeTypes]
+Order=[:constant]
+```
+
+## Internal Methods
+
+```@autodocs
+Modules=[NormalizedTimeTypes]
+Order=[:function]
+Public=false
 ```

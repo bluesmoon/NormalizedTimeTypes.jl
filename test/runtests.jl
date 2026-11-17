@@ -46,13 +46,21 @@ end
     @test norm.unix_ms      == 1476117296789
 
     # 5. DateTime & TimeZone String
-    norm = NormalizedTimeType(DateTime(2016, 10, 10, 12, 34, 56, 789), "America/New_York")
-    @test norm.timezone     == TimeZone("America/New_York")
-    @test norm.utc_datetime == DateTime(2016, 10, 10, 16, 34, 56, 789)
-    @test norm.tz_datetime  == ZonedDateTime(2016, 10, 10, 12, 34, 56, 789, TimeZone("America/New_York"))
-    @test norm.unix_ms      == 1476117296789
+    norm1 = NormalizedTimeType(DateTime(2016, 10, 10, 12, 34, 56, 789), "America/Los_Angeles")
+    @test norm1.timezone     == TimeZone("America/Los_Angeles")
+    @test norm1.utc_datetime == DateTime(2016, 10, 10, 19, 34, 56, 789)
+    @test norm1.tz_datetime  == ZonedDateTime(2016, 10, 10, 12, 34, 56, 789, TimeZone("America/Los_Angeles"))
+    @test norm1.unix_ms      == 1476128096789
 
-    # 6. ZonedDateTime & TimeZone String - timezone string is ignored
+    # 6. clone
+    norm2 = NormalizedTimeType(norm1)
+    @test norm2 == norm1
+    # Verify that the two NormalizedTimeType objects are not the same object in memory
+    @test ccall(:jl_value_ptr, Ptr{Cvoid}, (Any,), norm1) != ccall(:jl_value_ptr, Ptr{Cvoid}, (Any,), norm2)
+    @test hash(norm2) == hash(norm1)
+    @test hash(norm2) != hash(norm)
+
+    # 7. ZonedDateTime & TimeZone String - timezone string is ignored
     norm = NormalizedTimeType(ZonedDateTime(2016, 10, 10, 12, 34, 56, 789, tz"America/New_York"), "CEST")
     @test norm.timezone     == TimeZone("America/New_York")
     @test norm.utc_datetime == DateTime(2016, 10, 10, 16, 34, 56, 789)
@@ -272,4 +280,8 @@ end
     @test datetime2unix_ms(norm) == 1476117296789
     @test datetime2unix_ms(norm.tz_datetime) == 1476117296789
     @test datetime2unix_ms(norm.utc_datetime) == 1476117296789
+
+    today_ms = datetime2unix(DateTime(today())) * 1000
+    @test datetime2unix_ms(today()) == today_ms
+    @test unix_ms2datetime(round(Int64, today_ms)) == DateTime(today())
 end
