@@ -287,7 +287,7 @@ struct NormalizedTimeType
         return NormalizedTimeType(t, tz)
     end
 
-    NormalizedTimeType(t::NormalizedTimeType, x...) = t
+    NormalizedTimeType(t::NormalizedTimeType, x...) = new(t.timezone, t.utc_datetime, t.tz_datetime, t.unix_ms)
 
     function NormalizedTimeType(d::AbstractString, tz::Union{TimeZone, AbstractString}=tz"UTC")
         orig_d = d
