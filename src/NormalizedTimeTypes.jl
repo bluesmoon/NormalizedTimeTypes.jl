@@ -3,7 +3,7 @@ module NormalizedTimeTypes
 using Dates
 using TimeZones
 
-export NormalizedTimeType, TimeWindowType, NormalizedTimeWindowType, TimeWindowTypeUnion
+export NormalizedTimeType, TimeWindowType, NormalizedTimeWindowType, TimeWindowTypeUnion, datetime2unix_ms
 
 """
 Ordered list of `(Regex, DateFormat)` pairs for parsing timezone-naïve date/time
@@ -334,6 +334,16 @@ Base.floor(dt::NormalizedTimeType, p::Type{<:Dates.Period}) = NormalizedTimeType
 Base.ceil(dt::NormalizedTimeType, p::Type{<:Dates.Period})  = NormalizedTimeType(ceil(dt.tz_datetime, p))
 
 Dates.datetime2unix(n::NormalizedTimeType) = n.unix_ms / 1000
+Dates.datetime2unix(z::ZonedDateTime) = datetime2unix(z.utc_datetime)
+
+"""
+Return the milliseconds since the Unix Epoch of 1970-01-01T00:00:00.000Z of a `NormalizedTimeType` or `TimeType`.
+
+Similar to `Dates.datetime2unix`, but returns milliseconds as an `Int64` instead of seconds.
+"""
+datetime2unix_ms(dt::NormalizedTimeType)::Int64 = dt.unix_ms
+datetime2unix_ms(dt::DateTime)::Int64 = round(Int64, Dates.datetime2unix(dt) * 1000)
+datetime2unix_ms(dt::ZonedDateTime)::Int64 = datetime2unix_ms(dt.utc_datetime)
 
 
 """

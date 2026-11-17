@@ -262,3 +262,14 @@ end
     @test x_dt  == DateTime(2016, 10, 10, 16, 34, 56, 789)
     @test x_zdt == ZonedDateTime(2016, 10, 10, 12, 34, 56, 789, TimeZone("America/New_York"))
 end
+
+@testset "datetime2..." begin
+    norm = NormalizedTimeType(DateTime(2016, 10, 10, 12, 34, 56, 789), TimeZone("America/New_York"))
+    @test datetime2unix(norm) == 1476117296.789
+    @test datetime2unix(norm.tz_datetime) == 1476117296.789
+    @test datetime2unix(norm.utc_datetime) == 1476117296.789
+
+    @test datetime2unix_ms(norm) == 1476117296789
+    @test datetime2unix_ms(norm.tz_datetime) == 1476117296789
+    @test datetime2unix_ms(norm.utc_datetime) == 1476117296789
+end
