@@ -319,6 +319,8 @@ import Base: +, -, ==
 Base.convert(::Type{DateTime}, x::NormalizedTimeType) = x.utc_datetime
 Base.convert(::Type{ZonedDateTime}, x::NormalizedTimeType) = x.tz_datetime
 Base.convert(::Type{Int64}, x::NormalizedTimeType) = x.unix_ms
+Dates.DateTime(x::NormalizedTimeType) = x.utc_datetime
+TimeZones.ZonedDateTime(x::NormalizedTimeType) = x.tz_datetime
 
 -(ntt::NormalizedTimeType, p::Union{Dates.CompoundPeriod, Dates.Period}) = NormalizedTimeType(ntt.tz_datetime - p)
 +(ntt::NormalizedTimeType, p::Union{Dates.CompoundPeriod, Dates.Period}) = NormalizedTimeType(ntt.tz_datetime + p)

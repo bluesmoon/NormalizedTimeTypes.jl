@@ -250,5 +250,15 @@ end
     @test convert(DateTime, norm1)      == DateTime(2016, 10, 10, 16, 34, 56, 789)
     @test convert(ZonedDateTime, norm1) == ZonedDateTime(2016, 10, 10, 12, 34, 56, 789, TimeZone("America/New_York"))
     @test convert(Int64, norm1)         == 1476117296789
-    @test datetime2unix(norm1)          == 1476117296.789
+
+    @test DateTime(norm1)      == DateTime(2016, 10, 10, 16, 34, 56, 789)
+    @test ZonedDateTime(norm1) == ZonedDateTime(2016, 10, 10, 12, 34, 56, 789, TimeZone("America/New_York"))
+
+    local x_int::Int64 = norm1
+    local x_dt::DateTime = norm1
+    local x_zdt::ZonedDateTime = norm1
+
+    @test x_int == 1476117296789
+    @test x_dt  == DateTime(2016, 10, 10, 16, 34, 56, 789)
+    @test x_zdt == ZonedDateTime(2016, 10, 10, 12, 34, 56, 789, TimeZone("America/New_York"))
 end
