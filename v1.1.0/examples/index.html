@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="referrer" content="no-referrer"/><title>Examples · NormalizedTimeTypes.jl</title><meta name="title" content="Examples · NormalizedTimeTypes.jl"/><meta property="og:title" content="Examples · NormalizedTimeTypes.jl"/><meta property="twitter:title" content="Examples · NormalizedTimeTypes.jl"/><meta name="description" content="Documentation for NormalizedTimeTypes.jl."/><meta property="og:description" content="Documentation for NormalizedTimeTypes.jl."/><meta property="twitter:description" content="Documentation for NormalizedTimeTypes.jl."/><meta property="og:url" content="https://bluesmoon.github.io/NormalizedTimeTypes.jl/examples/"/><meta property="twitter:url" content="https://bluesmoon.github.io/NormalizedTimeTypes.jl/examples/"/><link rel="canonical" href="https://bluesmoon.github.io/NormalizedTimeTypes.jl/examples/"/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.63.2/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">NormalizedTimeTypes.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li class="is-active"><a class="tocitem" href>Examples</a><ul class="internal"><li><a class="tocitem" href="#Basic-Parsing-and-Creation"><span>Basic Parsing and Creation</span></a></li><li><a class="tocitem" href="#Working-with-Timezones"><span>Working with Timezones</span></a></li><li><a class="tocitem" href="#Accessing-Time-Values"><span>Accessing Time Values</span></a></li><li><a class="tocitem" href="#Arithmetic-and-Date-Calculations"><span>Arithmetic and Date Calculations</span></a></li><li><a class="tocitem" href="#Working-with-Multiple-Timestamps"><span>Working with Multiple Timestamps</span></a></li><li><a class="tocitem" href="#Common-Patterns"><span>Common Patterns</span></a></li><li><a class="tocitem" href="#Edge-Cases"><span>Edge Cases</span></a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Examples</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Examples</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/bluesmoon/NormalizedTimeTypes.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/bluesmoon/NormalizedTimeTypes.jl/blob/main/docs/src/examples.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Examples"><a class="docs-heading-anchor" href="#Examples">Examples</a><a id="Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Examples" title="Permalink"></a></h1><p>This page shows practical recipes for common use cases with NormalizedTimeTypes.jl.</p><h2 id="Basic-Parsing-and-Creation"><a class="docs-heading-anchor" href="#Basic-Parsing-and-Creation">Basic Parsing and Creation</a><a id="Basic-Parsing-and-Creation-1"></a><a class="docs-heading-anchor-permalink" href="#Basic-Parsing-and-Creation" title="Permalink"></a></h2><h3 id="Creating-from-Different-Date/Time-Types"><a class="docs-heading-anchor" href="#Creating-from-Different-Date/Time-Types">Creating from Different Date/Time Types</a><a id="Creating-from-Different-Date/Time-Types-1"></a><a class="docs-heading-anchor-permalink" href="#Creating-from-Different-Date/Time-Types" title="Permalink"></a></h3><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; # From a Date (defaults to UTC)
+       norm = NormalizedTimeType(Date(2024, 11, 17))
+NormalizedTimeType(tz&quot;UTC&quot;, DateTime(&quot;2024-11-17T00:00:00&quot;), ZonedDateTime(2024, 11, 17, tz&quot;UTC&quot;), 1731801600000)
+
+julia&gt; # From a DateTime (defaults to UTC)
+       norm = NormalizedTimeType(DateTime(2024, 11, 17, 10, 30, 0))
+NormalizedTimeType(tz&quot;UTC&quot;, DateTime(&quot;2024-11-17T10:30:00&quot;), ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;UTC&quot;), 1731839400000)
+
+julia&gt; # From a ZonedDateTime
+       zdt = ZonedDateTime(2024, 11, 17, 10, 30, 0, tz&quot;America/New_York&quot;)
+       norm = NormalizedTimeType(zdt)
+NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2024-11-17T15:30:00&quot;), ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;America/New_York&quot;), 1731857400000)</code></pre><h3 id="Parsing-ISO-8601-Strings"><a class="docs-heading-anchor" href="#Parsing-ISO-8601-Strings">Parsing ISO 8601 Strings</a><a id="Parsing-ISO-8601-Strings-1"></a><a class="docs-heading-anchor-permalink" href="#Parsing-ISO-8601-Strings" title="Permalink"></a></h3><p>ISO 8601 format is automatically detected with or without timezone information:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes
+
+julia&gt; # Without timezone (defaults to UTC)
+       norm = NormalizedTimeType(&quot;2024-11-17T10:30:00&quot;)
+NormalizedTimeType(tz&quot;UTC&quot;, Dates.DateTime(&quot;2024-11-17T10:30:00&quot;), TimeZones.ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;UTC&quot;), 1731839400000)
+
+julia&gt; # With timezone offset (+HH:MM format)
+       norm = NormalizedTimeType(&quot;2024-11-17T10:30:00+05:30&quot;)
+NormalizedTimeType(tz&quot;UTC+05:30&quot;, Dates.DateTime(&quot;2024-11-17T05:00:00&quot;), TimeZones.ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;UTC+05:30&quot;), 1731819600000)
+
+julia&gt; # With timezone offset (-HH:MM format)
+       norm = NormalizedTimeType(&quot;2024-11-17T10:30:00-05:00&quot;)
+NormalizedTimeType(tz&quot;UTC-05:00&quot;, Dates.DateTime(&quot;2024-11-17T15:30:00&quot;), TimeZones.ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;UTC-05:00&quot;), 1731857400000)
+
+julia&gt; # With milliseconds
+       norm = NormalizedTimeType(&quot;2024-11-17T10:30:00.123&quot;)
+NormalizedTimeType(tz&quot;UTC&quot;, Dates.DateTime(&quot;2024-11-17T10:30:00.123&quot;), TimeZones.ZonedDateTime(2024, 11, 17, 10, 30, 0, 123, tz&quot;UTC&quot;), 1731839400123)</code></pre><h3 id="Parsing-Space-Separated-Dates"><a class="docs-heading-anchor" href="#Parsing-Space-Separated-Dates">Parsing Space-Separated Dates</a><a id="Parsing-Space-Separated-Dates-1"></a><a class="docs-heading-anchor-permalink" href="#Parsing-Space-Separated-Dates" title="Permalink"></a></h3><p>The library also supports space-separated date and time components:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes
+
+julia&gt; # Space-separated with no timezone
+       norm = NormalizedTimeType(&quot;2024-11-17 10:30:00&quot;)
+NormalizedTimeType(tz&quot;UTC&quot;, Dates.DateTime(&quot;2024-11-17T10:30:00&quot;), TimeZones.ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;UTC&quot;), 1731839400000)
+
+julia&gt; # Space-separated with offset
+       norm = NormalizedTimeType(&quot;2024-11-17 10:30:00-0500&quot;)
+NormalizedTimeType(tz&quot;UTC-05:00&quot;, Dates.DateTime(&quot;2024-11-17T15:30:00&quot;), TimeZones.ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;UTC-05:00&quot;), 1731857400000)</code></pre><h2 id="Working-with-Timezones"><a class="docs-heading-anchor" href="#Working-with-Timezones">Working with Timezones</a><a id="Working-with-Timezones-1"></a><a class="docs-heading-anchor-permalink" href="#Working-with-Timezones" title="Permalink"></a></h2><h3 id="Specifying-Timezone-for-Naive-Datetimes"><a class="docs-heading-anchor" href="#Specifying-Timezone-for-Naive-Datetimes">Specifying Timezone for Naive Datetimes</a><a id="Specifying-Timezone-for-Naive-Datetimes-1"></a><a class="docs-heading-anchor-permalink" href="#Specifying-Timezone-for-Naive-Datetimes" title="Permalink"></a></h3><p>When creating from a <code>DateTime</code> or <code>Date</code>, provide a timezone string or <code>TimeZone</code> object:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, TimeZones, Dates
+
+julia&gt; # With a TimeZone object
+       dt = DateTime(2024, 11, 17, 10, 30, 0)
+       norm = NormalizedTimeType(dt, tz&quot;America/Los_Angeles&quot;)
+NormalizedTimeType(tz&quot;America/Los_Angeles&quot;, DateTime(&quot;2024-11-17T18:30:00&quot;), ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;America/Los_Angeles&quot;), 1731868200000)
+
+julia&gt; # With a timezone string
+       norm = NormalizedTimeType(dt, &quot;Europe/London&quot;)
+NormalizedTimeType(tz&quot;Europe/London&quot;, DateTime(&quot;2024-11-17T10:30:00&quot;), ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;Europe/London&quot;), 1731839400000)</code></pre><h3 id="Using-Legacy-Timezone-Abbreviations"><a class="docs-heading-anchor" href="#Using-Legacy-Timezone-Abbreviations">Using Legacy Timezone Abbreviations</a><a id="Using-Legacy-Timezone-Abbreviations-1"></a><a class="docs-heading-anchor-permalink" href="#Using-Legacy-Timezone-Abbreviations" title="Permalink"></a></h3><p>The library recognizes common timezone abbreviations and maps them to full timezone names:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates
+
+julia&gt; # EDT automatically resolves to America/New_York
+       dt = DateTime(2024, 7, 17, 10, 30, 0)
+       norm = NormalizedTimeType(dt, &quot;EDT&quot;)
+┌ Warning: Received an abbreviated TimeZone: EDT, using full timezone: America/New_York instead.
+└ @ NormalizedTimeTypes /data/NormalizedTimeTypes.jl/src/NormalizedTimeTypes.jl:369
+NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2024-07-17T14:30:00&quot;), TimeZones.ZonedDateTime(2024, 7, 17, 10, 30, tz&quot;America/New_York&quot;), 1721226600000)
+
+julia&gt; # PST maps to America/Los_Angeles
+       norm = NormalizedTimeType(DateTime(2024, 1, 15, 14, 0, 0), &quot;PST&quot;)
+┌ Warning: Received an abbreviated TimeZone: PST, using full timezone: America/Los_Angeles instead.
+└ @ NormalizedTimeTypes /data/NormalizedTimeTypes.jl/src/NormalizedTimeTypes.jl:369
+NormalizedTimeType(tz&quot;America/Los_Angeles&quot;, DateTime(&quot;2024-01-15T22:00:00&quot;), TimeZones.ZonedDateTime(2024, 1, 15, 14, tz&quot;America/Los_Angeles&quot;), 1705356000000)
+
+julia&gt; # Other common abbreviations work too
+       norm = NormalizedTimeType(DateTime(2024, 11, 17, 10, 30, 0), &quot;JST&quot;)
+┌ Warning: Received an abbreviated TimeZone: JST, using full timezone: Asia/Tokyo instead.
+└ @ NormalizedTimeTypes /data/NormalizedTimeTypes.jl/src/NormalizedTimeTypes.jl:369
+NormalizedTimeType(tz&quot;Asia/Tokyo&quot;, DateTime(&quot;2024-11-17T01:30:00&quot;), TimeZones.ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;Asia/Tokyo&quot;), 1731807000000)</code></pre><h3 id="Handling-DST-Transitions"><a class="docs-heading-anchor" href="#Handling-DST-Transitions">Handling DST Transitions</a><a id="Handling-DST-Transitions-1"></a><a class="docs-heading-anchor-permalink" href="#Handling-DST-Transitions" title="Permalink"></a></h3><p>The library gracefully handles times that fall within DST transitions:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; # Spring forward transition: 2:00 AM doesn&#39;t exist on 2024-03-10 in America/New_York
+       # The library adjusts to a valid time
+       norm = NormalizedTimeType(DateTime(2024, 3, 10, 2, 30, 0), tz&quot;America/New_York&quot;)
+NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2024-03-10T06:30:00&quot;), ZonedDateTime(2024, 3, 10, 1, 30, tz&quot;America/New_York&quot;), 1710052200000)</code></pre><h2 id="Accessing-Time-Values"><a class="docs-heading-anchor" href="#Accessing-Time-Values">Accessing Time Values</a><a id="Accessing-Time-Values-1"></a><a class="docs-heading-anchor-permalink" href="#Accessing-Time-Values" title="Permalink"></a></h2><p>Each <code>NormalizedTimeType</code> stores the same instant in multiple formats. Access the representation you need:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; norm = NormalizedTimeType(DateTime(2024, 11, 17, 10, 30, 0), tz&quot;America/New_York&quot;)
+NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2024-11-17T15:30:00&quot;), ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;America/New_York&quot;), 1731857400000)
+
+julia&gt; # Get UTC DateTime
+       norm.utc_datetime
+2024-11-17T15:30:00
+
+julia&gt; # Get timezone-aware ZonedDateTime
+       norm.tz_datetime
+2024-11-17T10:30:00-05:00
+
+julia&gt; # Get Unix timestamp in milliseconds
+       norm.unix_ms
+1731857400000
+
+julia&gt; # Get the timezone
+       norm.timezone
+America/New_York (UTC-5/UTC-4)</code></pre><h3 id="Converting-to-Standard-Julia-Types"><a class="docs-heading-anchor" href="#Converting-to-Standard-Julia-Types">Converting to Standard Julia Types</a><a id="Converting-to-Standard-Julia-Types-1"></a><a class="docs-heading-anchor-permalink" href="#Converting-to-Standard-Julia-Types" title="Permalink"></a></h3><p><code>NormalizedTimeType</code> can be automatically converted to <code>DateTime</code>, <code>ZonedDateTime</code>, or <code>Int64</code>:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; norm = NormalizedTimeType(DateTime(2024, 11, 17, 10, 30, 0), &quot;America/Chicago&quot;)
+NormalizedTimeType(tz&quot;America/Chicago&quot;, DateTime(&quot;2024-11-17T16:30:00&quot;), ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;America/Chicago&quot;), 1731861000000)
+
+julia&gt; # Convert to DateTime (always UTC)
+       dt = convert(DateTime, norm)
+2024-11-17T16:30:00
+
+julia&gt; # Convert to ZonedDateTime (preserves timezone)
+       zdt = convert(ZonedDateTime, norm)
+2024-11-17T10:30:00-06:00
+
+julia&gt; # Convert to milliseconds since epoch
+       ms = convert(Int64, norm)
+1731861000000</code></pre><h3 id="Using-datetime2unix_ms-for-Unix-Timestamps"><a class="docs-heading-anchor" href="#Using-datetime2unix_ms-for-Unix-Timestamps">Using <code>datetime2unix_ms</code> for Unix Timestamps</a><a id="Using-datetime2unix_ms-for-Unix-Timestamps-1"></a><a class="docs-heading-anchor-permalink" href="#Using-datetime2unix_ms-for-Unix-Timestamps" title="Permalink"></a></h3><p>Convert any <code>DateTime</code>, <code>ZonedDateTime</code>, or <code>NormalizedTimeType</code> to milliseconds since the Unix Epoch:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; # From a NormalizedTimeType
+       norm = NormalizedTimeType(DateTime(2024, 11, 17, 10, 30, 0), tz&quot;America/New_York&quot;)
+       datetime2unix_ms(norm)
+1731857400000
+
+julia&gt; # From a DateTime (interpreted as UTC)
+       dt = DateTime(2024, 11, 17, 15, 30, 0)
+       datetime2unix_ms(dt)
+1731857400000
+
+julia&gt; # From a ZonedDateTime (automatically converted to UTC)
+       zdt = ZonedDateTime(2024, 11, 17, 10, 30, 0, tz&quot;America/New_York&quot;)
+       datetime2unix_ms(zdt)
+1731857400000
+
+julia&gt; # All three representations of the same instant give the same result
+       datetime2unix_ms(norm) == datetime2unix_ms(dt) == datetime2unix_ms(zdt)
+true</code></pre><h2 id="Arithmetic-and-Date-Calculations"><a class="docs-heading-anchor" href="#Arithmetic-and-Date-Calculations">Arithmetic and Date Calculations</a><a id="Arithmetic-and-Date-Calculations-1"></a><a class="docs-heading-anchor-permalink" href="#Arithmetic-and-Date-Calculations" title="Permalink"></a></h2><h3 id="Adding-and-Subtracting-Time-Periods"><a class="docs-heading-anchor" href="#Adding-and-Subtracting-Time-Periods">Adding and Subtracting Time Periods</a><a id="Adding-and-Subtracting-Time-Periods-1"></a><a class="docs-heading-anchor-permalink" href="#Adding-and-Subtracting-Time-Periods" title="Permalink"></a></h3><p>You can add or subtract any <code>Dates.Period</code> to/from a <code>NormalizedTimeType</code>:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; norm = NormalizedTimeType(DateTime(2024, 11, 17), tz&quot;America/New_York&quot;)
+NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2024-11-17T05:00:00&quot;), ZonedDateTime(2024, 11, 17, tz&quot;America/New_York&quot;), 1731819600000)
+
+julia&gt; # Add days
+       norm + Dates.Day(5)
+NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2024-11-22T05:00:00&quot;), ZonedDateTime(2024, 11, 22, tz&quot;America/New_York&quot;), 1732251600000)
+
+julia&gt; # Subtract weeks
+       norm - Dates.Week(2)
+NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2024-11-03T04:00:00&quot;), ZonedDateTime(2024, 11, 3, tz&quot;America/New_York&quot;), 1730606400000)
+
+julia&gt; # Add months
+       norm + Dates.Month(3)
+NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2025-02-17T05:00:00&quot;), ZonedDateTime(2025, 2, 17, tz&quot;America/New_York&quot;), 1739768400000)
+
+julia&gt; # Combine multiple periods
+       norm + Dates.Month(1) - Dates.Day(2) + Dates.Hour(6)
+NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2024-12-15T11:00:00&quot;), ZonedDateTime(2024, 12, 15, 6, tz&quot;America/New_York&quot;), 1734260400000)</code></pre><h3 id="Computing-Time-Differences"><a class="docs-heading-anchor" href="#Computing-Time-Differences">Computing Time Differences</a><a id="Computing-Time-Differences-1"></a><a class="docs-heading-anchor-permalink" href="#Computing-Time-Differences" title="Permalink"></a></h3><p>Subtract two <code>NormalizedTimeType</code> objects to get the difference as a <code>Dates.Period</code>:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; norm1 = NormalizedTimeType(DateTime(2024, 11, 17, 10, 0, 0), tz&quot;America/New_York&quot;)
+NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2024-11-17T15:00:00&quot;), ZonedDateTime(2024, 11, 17, 10, tz&quot;America/New_York&quot;), 1731855600000)
+
+julia&gt; norm2 = NormalizedTimeType(DateTime(2024, 11, 17, 14, 30, 0), tz&quot;America/New_York&quot;)
+NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2024-11-17T19:30:00&quot;), ZonedDateTime(2024, 11, 17, 14, 30, tz&quot;America/New_York&quot;), 1731871800000)
+
+julia&gt; # Difference in milliseconds
+       diff = norm2 - norm1
+16200000 milliseconds
+
+julia&gt; # Convert to seconds
+       div(diff.value, 1000)
+16200</code></pre><h2 id="Working-with-Multiple-Timestamps"><a class="docs-heading-anchor" href="#Working-with-Multiple-Timestamps">Working with Multiple Timestamps</a><a id="Working-with-Multiple-Timestamps-1"></a><a class="docs-heading-anchor-permalink" href="#Working-with-Multiple-Timestamps" title="Permalink"></a></h2><h3 id="Normalize-a-Collection-of-Mixed-Types"><a class="docs-heading-anchor" href="#Normalize-a-Collection-of-Mixed-Types">Normalize a Collection of Mixed Types</a><a id="Normalize-a-Collection-of-Mixed-Types-1"></a><a class="docs-heading-anchor-permalink" href="#Normalize-a-Collection-of-Mixed-Types" title="Permalink"></a></h3><p>Convert multiple timestamps from different sources into a uniform format:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; # Mix of different input types
+       timestamps = NormalizedTimeTypes.normalizeTimestamps(
+           DateTime(2024, 11, 17),
+           ZonedDateTime(2024, 11, 18, tz&quot;America/New_York&quot;),
+           Date(2024, 11, 19)
+       )
+3-element Vector{NormalizedTimeType}:
+ NormalizedTimeType(tz&quot;UTC&quot;, DateTime(&quot;2024-11-17T00:00:00&quot;), ZonedDateTime(2024, 11, 17, tz&quot;UTC&quot;), 1731801600000)
+ NormalizedTimeType(tz&quot;America/New_York&quot;, DateTime(&quot;2024-11-18T05:00:00&quot;), ZonedDateTime(2024, 11, 18, tz&quot;America/New_York&quot;), 1731906000000)
+ NormalizedTimeType(tz&quot;UTC&quot;, DateTime(&quot;2024-11-19T00:00:00&quot;), ZonedDateTime(2024, 11, 19, tz&quot;UTC&quot;), 1731974400000)
+
+julia&gt; # With an explicit timezone applied to unaware inputs
+       timestamps = NormalizedTimeTypes.normalizeTimestamps(
+           tz&quot;America/Los_Angeles&quot;,
+           DateTime(2024, 11, 17),
+           Date(2024, 11, 19)
+       )
+2-element Vector{NormalizedTimeType}:
+ NormalizedTimeType(tz&quot;America/Los_Angeles&quot;, DateTime(&quot;2024-11-17T08:00:00&quot;), ZonedDateTime(2024, 11, 17, tz&quot;America/Los_Angeles&quot;), 1731830400000)
+ NormalizedTimeType(tz&quot;America/Los_Angeles&quot;, DateTime(&quot;2024-11-19T08:00:00&quot;), ZonedDateTime(2024, 11, 19, tz&quot;America/Los_Angeles&quot;), 1732003200000)</code></pre><h2 id="Common-Patterns"><a class="docs-heading-anchor" href="#Common-Patterns">Common Patterns</a><a id="Common-Patterns-1"></a><a class="docs-heading-anchor-permalink" href="#Common-Patterns" title="Permalink"></a></h2><h3 id="Validating-and-Normalizing-User-Input"><a class="docs-heading-anchor" href="#Validating-and-Normalizing-User-Input">Validating and Normalizing User Input</a><a id="Validating-and-Normalizing-User-Input-1"></a><a class="docs-heading-anchor-permalink" href="#Validating-and-Normalizing-User-Input" title="Permalink"></a></h3><p>When receiving timestamps from external sources (e.g., web APIs), normalize them to handle various formats:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; # Simulating timestamps from different sources
+       sources = [
+           &quot;2024-11-17T10:30:00&quot;,           # ISO 8601 from API A
+           &quot;2024-11-17 10:30:00-0500&quot;,       # Space-separated from API B
+           DateTime(2024, 11, 17, 10, 30),   # DateTime from internal code
+       ]
+3-element Vector{Any}:
+ &quot;2024-11-17T10:30:00&quot;
+ &quot;2024-11-17 10:30:00-0500&quot;
+ 2024-11-17T10:30:00
+
+julia&gt; # Normalize all sources with a default timezone
+       normalized = [NormalizedTimeType(s, tz&quot;UTC&quot;) for s in sources]
+3-element Vector{NormalizedTimeType}:
+ NormalizedTimeType(tz&quot;UTC&quot;, DateTime(&quot;2024-11-17T10:30:00&quot;), ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;UTC&quot;), 1731839400000)
+ NormalizedTimeType(tz&quot;UTC-05:00&quot;, DateTime(&quot;2024-11-17T15:30:00&quot;), ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;UTC-05:00&quot;), 1731857400000)
+ NormalizedTimeType(tz&quot;UTC&quot;, DateTime(&quot;2024-11-17T10:30:00&quot;), ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;UTC&quot;), 1731839400000)</code></pre><h3 id="Working-with-Different-Representations-of-the-Same-Instant"><a class="docs-heading-anchor" href="#Working-with-Different-Representations-of-the-Same-Instant">Working with Different Representations of the Same Instant</a><a id="Working-with-Different-Representations-of-the-Same-Instant-1"></a><a class="docs-heading-anchor-permalink" href="#Working-with-Different-Representations-of-the-Same-Instant" title="Permalink"></a></h3><p>The same point in time can be represented in different ways. <code>NormalizedTimeType</code> maintains consistency:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; # Three different ways to represent the same instant
+       # 2024-11-17T10:30:00 in New York = 2024-11-17T15:30:00 UTC = 1731857400000 ms
+       ny = NormalizedTimeType(DateTime(2024, 11, 17, 10, 30, 0), &quot;America/New_York&quot;)
+       utc = NormalizedTimeType(&quot;2024-11-17T15:30:00&quot;)
+       offset = NormalizedTimeType(&quot;2024-11-17T10:30:00-05:00&quot;)
+NormalizedTimeType(tz&quot;UTC-05:00&quot;, DateTime(&quot;2024-11-17T15:30:00&quot;), ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;UTC-05:00&quot;), 1731857400000)
+
+julia&gt; # All have the same UTC datetime and unix_ms
+       ny.utc_datetime == utc.utc_datetime == offset.utc_datetime
+true
+
+julia&gt; ny.unix_ms == utc.unix_ms == offset.unix_ms
+true
+
+julia&gt; # But different local representations
+       ny.tz_datetime
+2024-11-17T10:30:00-05:00
+
+julia&gt; utc.tz_datetime
+2024-11-17T15:30:00+00:00</code></pre><h3 id="Round-Trip-Conversions"><a class="docs-heading-anchor" href="#Round-Trip-Conversions">Round-Trip Conversions</a><a id="Round-Trip-Conversions-1"></a><a class="docs-heading-anchor-permalink" href="#Round-Trip-Conversions" title="Permalink"></a></h3><p>Convert to different formats and back while preserving the instant:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; # Start with a datetime in a specific timezone
+       original = NormalizedTimeType(DateTime(2024, 11, 17, 10, 30, 0), &quot;America/Los_Angeles&quot;)
+NormalizedTimeType(tz&quot;America/Los_Angeles&quot;, DateTime(&quot;2024-11-17T18:30:00&quot;), ZonedDateTime(2024, 11, 17, 10, 30, tz&quot;America/Los_Angeles&quot;), 1731868200000)
+
+julia&gt; # Convert to UTC datetime and back
+       utc_dt = original.utc_datetime
+       restored = NormalizedTimeType(utc_dt)  # Defaults to UTC
+NormalizedTimeType(tz&quot;UTC&quot;, DateTime(&quot;2024-11-17T18:30:00&quot;), ZonedDateTime(2024, 11, 17, 18, 30, tz&quot;UTC&quot;), 1731868200000)
+
+julia&gt; # Same instant, different timezone representation
+       original.unix_ms == restored.unix_ms
+true</code></pre><h3 id="Date-Arithmetic-Across-Different-Timezones"><a class="docs-heading-anchor" href="#Date-Arithmetic-Across-Different-Timezones">Date Arithmetic Across Different Timezones</a><a id="Date-Arithmetic-Across-Different-Timezones-1"></a><a class="docs-heading-anchor-permalink" href="#Date-Arithmetic-Across-Different-Timezones" title="Permalink"></a></h3><p>Arithmetic operations work consistently across timezones because they operate on the underlying instant in UTC:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates
+
+julia&gt; # Same instant represented in two different timezones
+       # 2024-11-17T15:30:00 UTC = 10:30 EST in New York = 21:00 IST in Kolkata
+       ny = NormalizedTimeType(&quot;2024-11-17T10:30:00-05:00&quot;)
+       kolkata = NormalizedTimeType(&quot;2024-11-17T21:00:00+05:30&quot;)
+NormalizedTimeType(tz&quot;UTC+05:30&quot;, DateTime(&quot;2024-11-17T15:30:00&quot;), TimeZones.ZonedDateTime(2024, 11, 17, 21, tz&quot;UTC+05:30&quot;), 1731857400000)
+
+julia&gt; # Both represent the exact same instant
+       ny.unix_ms == kolkata.unix_ms
+true
+
+julia&gt; # Adding the same period to each preserves the relationship
+       ny_plus_1day = ny + Dates.Day(1)
+       kolkata_plus_1day = kolkata + Dates.Day(1)
+NormalizedTimeType(tz&quot;UTC+05:30&quot;, DateTime(&quot;2024-11-18T15:30:00&quot;), TimeZones.ZonedDateTime(2024, 11, 18, 21, tz&quot;UTC+05:30&quot;), 1731943800000)
+
+julia&gt; # Still the same instant
+       ny_plus_1day.unix_ms == kolkata_plus_1day.unix_ms
+true
+
+julia&gt; # Computing differences between times in different timezones
+       kolkata2 = NormalizedTimeType(&quot;2024-11-18T00:45:00+05:30&quot;)
+       diff = kolkata2 - ny
+13500000 milliseconds
+
+julia&gt; # Verify this is exactly 3 hours and 45 minutes
+       diff == Dates.Hour(3) + Dates.Minute(45)
+true</code></pre><h2 id="Edge-Cases"><a class="docs-heading-anchor" href="#Edge-Cases">Edge Cases</a><a id="Edge-Cases-1"></a><a class="docs-heading-anchor-permalink" href="#Edge-Cases" title="Permalink"></a></h2><h3 id="Millisecond-Precision"><a class="docs-heading-anchor" href="#Millisecond-Precision">Millisecond Precision</a><a id="Millisecond-Precision-1"></a><a class="docs-heading-anchor-permalink" href="#Millisecond-Precision" title="Permalink"></a></h3><p>The library maintains millisecond precision for fractional seconds:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates
+
+julia&gt; # With milliseconds
+       norm1 = NormalizedTimeType(&quot;2024-11-17T10:30:00.123&quot;)
+NormalizedTimeType(tz&quot;UTC&quot;, DateTime(&quot;2024-11-17T10:30:00.123&quot;), TimeZones.ZonedDateTime(2024, 11, 17, 10, 30, 0, 123, tz&quot;UTC&quot;), 1731839400123)
+
+julia&gt; norm2 = NormalizedTimeType(&quot;2024-11-17T10:30:00.456&quot;)
+NormalizedTimeType(tz&quot;UTC&quot;, DateTime(&quot;2024-11-17T10:30:00.456&quot;), TimeZones.ZonedDateTime(2024, 11, 17, 10, 30, 0, 456, tz&quot;UTC&quot;), 1731839400456)
+
+julia&gt; # Can distinguish between nearby timestamps
+       norm2.unix_ms - norm1.unix_ms
+333</code></pre><h3 id="Leap-Seconds-and-Boundary-Dates"><a class="docs-heading-anchor" href="#Leap-Seconds-and-Boundary-Dates">Leap Seconds and Boundary Dates</a><a id="Leap-Seconds-and-Boundary-Dates-1"></a><a class="docs-heading-anchor-permalink" href="#Leap-Seconds-and-Boundary-Dates" title="Permalink"></a></h3><p>The library handles boundary conditions gracefully:</p><pre><code class="language-julia-repl hljs">julia&gt; using NormalizedTimeTypes, Dates, TimeZones
+
+julia&gt; # Year boundaries
+       norm = NormalizedTimeType(&quot;2024-12-31T23:59:59&quot;)
+NormalizedTimeType(tz&quot;UTC&quot;, DateTime(&quot;2024-12-31T23:59:59&quot;), ZonedDateTime(2024, 12, 31, 23, 59, 59, tz&quot;UTC&quot;), 1735689599000)
+
+julia&gt; # Next instant crosses year boundary
+       next = norm + Dates.Second(1)
+NormalizedTimeType(tz&quot;UTC&quot;, DateTime(&quot;2025-01-01T00:00:00&quot;), ZonedDateTime(2025, 1, 1, tz&quot;UTC&quot;), 1735689600000)</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.20.0 on <span class="colophon-date" title="Wednesday 18 November 2026 19:28">Wednesday 18 November 2026</span>. Using Julia version 1.13.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
