@@ -3,7 +3,7 @@ module NormalizedTimeTypes
 using Dates
 using TimeZones
 
-export NormalizedTimeType, TimeWindowType, NormalizedTimeWindowType, TimeWindowTypeUnion, datetime2unix_ms
+export NormalizedTimeType, TimeWindowType, NormalizedTimeWindowType, TimeWindowTypeUnion, datetime2unix_ms, unix_ms2datetime
 
 """
 Ordered list of `(Regex, DateFormat)` pairs for parsing timezone-naïve date/time
@@ -326,6 +326,7 @@ TimeZones.ZonedDateTime(x::NormalizedTimeType) = x.tz_datetime
 +(ntt::NormalizedTimeType, p::Union{Dates.CompoundPeriod, Dates.Period}) = NormalizedTimeType(ntt.tz_datetime + p)
 -(t1::NormalizedTimeType, t2::NormalizedTimeType) = t1.utc_datetime - t2.utc_datetime
 ==(x::NormalizedTimeType, y::NormalizedTimeType) = x.unix_ms == y.unix_ms && x.timezone == y.timezone
+
 Base.isless(x::NormalizedTimeType, y::NormalizedTimeType) = isless(x.unix_ms, y.unix_ms)
 
 ### Add `trunc`, `floor` and `ceil` for NormalizedTimeType
@@ -333,8 +334,8 @@ Base.trunc(dt::NormalizedTimeType, p::Type{<:Dates.Period}) = NormalizedTimeType
 Base.floor(dt::NormalizedTimeType, p::Type{<:Dates.Period}) = NormalizedTimeType(floor(dt.tz_datetime, p))
 Base.ceil(dt::NormalizedTimeType, p::Type{<:Dates.Period})  = NormalizedTimeType(ceil(dt.tz_datetime, p))
 
-Dates.datetime2unix(n::NormalizedTimeType) = n.unix_ms / 1000
-Dates.datetime2unix(z::ZonedDateTime) = datetime2unix(z.utc_datetime)
+Dates.datetime2unix(n::NormalizedTimeType)::Float64 = n.unix_ms / 1000
+Dates.datetime2unix(z::ZonedDateTime)::Float64      = datetime2unix(z.utc_datetime)
 
 """
 Return the milliseconds since the Unix Epoch of 1970-01-01T00:00:00.000Z of a `NormalizedTimeType` or `TimeType`.
@@ -342,15 +343,23 @@ Return the milliseconds since the Unix Epoch of 1970-01-01T00:00:00.000Z of a `N
 Similar to `Dates.datetime2unix`, but returns milliseconds as an `Int64` instead of seconds.
 """
 datetime2unix_ms(dt::NormalizedTimeType)::Int64 = dt.unix_ms
-datetime2unix_ms(dt::DateTime)::Int64 = round(Int64, Dates.datetime2unix(dt) * 1000)
-datetime2unix_ms(dt::ZonedDateTime)::Int64 = datetime2unix_ms(dt.utc_datetime)
+datetime2unix_ms(dt::DateTime)::Int64           = round(Int64, Dates.datetime2unix(dt) * 1000)
+datetime2unix_ms(dt::Date)::Int64               = round(Int64, Dates.datetime2unix(DateTime(dt)) * 1000)
+datetime2unix_ms(dt::ZonedDateTime)::Int64      = datetime2unix_ms(dt.utc_datetime)
+
+"""
+    * unix_ms2datetime(::Int64) → DateTime
+
+Return the `DateTime` representation of milliseconds since the Unix Epoch of 1970-01-01T00:00:00.000Z.
+"""
+unix_ms2datetime(ms::Int64)::DateTime = Dates.unix2datetime(ms / 1000)
 
 
 """
 Convert a legacy TimeZone abbreviation to a full TimeZone name. Returns UTC for
 unrecognized abbreviations.
 """
-function expand_legacy_timezone(tz_str::AbstractString)
+function expand_legacy_timezone(tz_str::AbstractString)::TimeZone
     if isempty(tz_str)
         tz_str = tz"UTC"
     elseif tz_str ∈ timezone_abbrs()
