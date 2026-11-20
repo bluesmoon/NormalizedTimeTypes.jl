@@ -5,6 +5,6 @@ NormalizedTimeTypes = "ead6db35-cbeb-40f8-a7de-ab0ee5a3dc38"
 TimeZones = "f269a46b-ccf7-5d73-abea-4c690281aa53"
 
 [compat]
-Dates = "<0.0.1, 1.6"
+Dates = "<0.0.1, 1, 1.6"
 Documenter = "1.20.0"
 TimeZones = "1.22.4"
