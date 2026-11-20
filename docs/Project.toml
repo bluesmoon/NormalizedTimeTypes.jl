@@ -7,4 +7,5 @@ TimeZones = "f269a46b-ccf7-5d73-abea-4c690281aa53"
 [compat]
 Dates = "<0.0.1, 1.6"
 Documenter = "1.20.0"
+NormalizedTimeTypes = "1.0.0"
 TimeZones = "1.22.4"
